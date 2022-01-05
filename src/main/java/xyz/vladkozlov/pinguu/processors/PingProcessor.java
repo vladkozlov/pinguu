@@ -8,7 +8,6 @@ import xyz.vladkozlov.pinguu.events.EventManager;
 import xyz.vladkozlov.pinguu.events.EventType;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,25 +23,25 @@ public abstract class PingProcessor implements Processor {
     }
 
     @Override
-    public void process(BufferedReader inputStream) throws IOException {
-        String originalString;
-        while ((originalString = inputStream.readLine()) != null)
-        {
-            var finalOriginalString = originalString;
-
-            parsePingStringToPingData(finalOriginalString)
-                    .ifPresentOrElse(pd -> notify(EventType.PING_EVENT, generateEvent(pd)),
-                            () -> rules()
-                                    .entrySet()
-                                    .stream()
-                                    .filter(entry -> entry.getKey().apply(finalOriginalString))
-                                    .findFirst()
-                                    .ifPresent(entry -> {
-                                        var event = generateEvent(new PingException(entry.getValue()));
-                                        notify(EventType.EXCEPTION_EVENT, event);
-                                    }));
-        }
+    public void process(BufferedReader inputStream) {
+        inputStream
+                .lines()
+                .map(inputString -> new Combinator(parsePingStringToPingData(inputString), inputString))
+                .forEach(combinator ->
+                        combinator
+                                .pingData()
+                                .ifPresentOrElse(pd -> notify(EventType.PING_EVENT, generateEvent(pd)),
+                                        () -> rules()
+                                            .entrySet()
+                                            .stream()
+                                            .filter(entry -> entry.getKey().apply(combinator.origStr()))
+                                            .findFirst()
+                                            .ifPresent(entry ->
+                                                    notify(EventType.EXCEPTION_EVENT,
+                                                            generateEvent(new PingException(entry.getValue()))))));
     }
+
+    record Combinator(Optional<PingData> pingData, String origStr){}
 
     private <T> Event<T> generateEvent(T data) {
         return new Event<>(++eventId, LocalDateTime.now(), data);

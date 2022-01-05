@@ -28,7 +28,7 @@ public class EventManager {
         }
     }
 
-    public <T> void notify(EventType eventType, Event<T> data) {
+    public void notify(EventType eventType, Event<?> data) {
         for (EventListener listener : this.listeners.get(eventType)) {
             listener.update(data);
         }
