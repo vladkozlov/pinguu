@@ -30,7 +30,7 @@ public class WindowsPingProcessor extends PingProcessor implements Processor {
                 super.notify(EventType.PING_EVENT, event);
             } else {
                 try {
-                    throwIfStringIsError(originalString);
+                    throwIfStringIsException(originalString);
                 } catch (PingException e) {
                     var event = new Event<>(eventId, LocalDateTime.now(), e);
                     eventId++;
@@ -54,7 +54,7 @@ public class WindowsPingProcessor extends PingProcessor implements Processor {
     }
 
 
-    private void throwIfStringIsError(String originalString) throws PingException {
+    private void throwIfStringIsException(String originalString) throws PingException {
         if (originalString.endsWith("Destination host unreachable.")) {
             throw new PingException("Destination host unreachable.");
         } else if (originalString.startsWith("General failure")) {
