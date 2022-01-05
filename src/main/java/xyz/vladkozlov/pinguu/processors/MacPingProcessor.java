@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-public class MacPingProcessor implements PingProcessor {
+public class MacPingProcessor extends PingProcessor implements Processor {
     private final String regex = "(\\d+) bytes from " + Utils.IPV4_PATTERN + ": icmp_seq=(\\d+) ttl=(\\d+) time=(\\d+(\\.\\d+)?) ms";
     private final Pattern pattern = Pattern.compile(regex);
 

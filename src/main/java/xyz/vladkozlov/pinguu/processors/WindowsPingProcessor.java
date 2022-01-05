@@ -2,6 +2,7 @@ package xyz.vladkozlov.pinguu.processors;
 
 import xyz.vladkozlov.pinguu.PingData;
 import xyz.vladkozlov.pinguu.PingException;
+import xyz.vladkozlov.pinguu.events.PingEventType;
 import xyz.vladkozlov.pinguu.utils.Utils;
 
 import java.io.BufferedReader;
@@ -9,7 +10,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-public class WindowsPingProcessor implements PingProcessor {
+public class WindowsPingProcessor extends PingProcessor implements Processor {
     private final String regex = "Reply from "+ Utils.IPV4_PATTERN + ": bytes=(\\d+) time=(\\d+)ms TTL=(\\d+)";
     private final Pattern pattern = Pattern.compile(regex);
 
@@ -18,11 +19,9 @@ public class WindowsPingProcessor implements PingProcessor {
         String originalString;
         while ((originalString = inputStream.readLine()) != null)
         {
-            System.out.println(originalString);
-
             var pingData = getPingDataFromString(originalString);
             if (pingData.isPresent()) {
-                System.out.println(pingData.get());
+                super.notify(PingEventType.PING_EVENT, pingData.get());
             } else {
                 try {
                     throwIfStringIsError(originalString);
