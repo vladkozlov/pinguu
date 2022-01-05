@@ -6,8 +6,8 @@
 
     <groupId>xyz.vladkozlov</groupId>
     <artifactId>pinguu</artifactId>
-    <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <version>0.5</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
