@@ -9,11 +9,11 @@ import xyz.vladkozlov.pinguu.processors.win.WindowsPingProcessor;
 import java.io.IOException;
 import java.net.URL;
 
-public class Ping {
+public class Pinguu {
     private final PingProcess pingProcess;
     private final Processor pingProcessor;
 
-    public Ping(URL host) {
+    public Pinguu(URL host) {
         this.pingProcess = new PingProcess(host);
         this.pingProcessor = getOsSpecificProcessorStrategy(pingProcess.getOS());
         assert pingProcessor != null;
@@ -49,7 +49,4 @@ public class Ping {
     {
         return this.pingProcess.stop();
     }
-
-
-
 }

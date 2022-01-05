@@ -16,7 +16,7 @@ public class Application {
         try {
             url = new URL(hostToPing);
 
-            var pingApp = new Ping(url);
+            var pingApp = new Pinguu(url);
 
             pingApp.addListener(EventType.PING_EVENT, new LoggerListener());
             pingApp.addListener(EventType.PING_EVENT, new StatisticsListener());
