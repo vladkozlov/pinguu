@@ -6,8 +6,8 @@ import xyz.vladkozlov.pinguu.events.EventListener;
 
 public class ExceptionListener implements EventListener<PingException> {
     @Override
-    public void update(Event<PingException> data) {
-        var ex = data.data();
-        System.err.printf("[%d] Exception occurred: %s\n", data.id(), ex.getMessage());
+    public void update(Event<PingException> event) {
+        var ex = event.data();
+        System.err.printf("[%d] Exception occurred: %s\n", event.id(), ex.getMessage());
     }
 }
