@@ -1,26 +1,26 @@
 package xyz.vladkozlov.pinguu.processors;
 
-import xyz.vladkozlov.pinguu.PingData;
-import xyz.vladkozlov.pinguu.events.PingEventListener;
-import xyz.vladkozlov.pinguu.events.PingEventManager;
-import xyz.vladkozlov.pinguu.events.PingEventType;
+import xyz.vladkozlov.pinguu.events.Event;
+import xyz.vladkozlov.pinguu.events.EventListener;
+import xyz.vladkozlov.pinguu.events.EventManager;
+import xyz.vladkozlov.pinguu.events.EventType;
 
 public abstract class PingProcessor {
-    private final PingEventManager events;
+    private final EventManager events;
 
     public PingProcessor() {
-        events = new PingEventManager();
+        events = new EventManager();
     }
 
-    public void notify(PingEventType event, PingData pingData) {
+    public <T> void notify(EventType event, Event<T> pingData) {
         events.notify(event, pingData);
     }
 
-    public void subscribe(PingEventType event, PingEventListener listener) {
+    public void subscribe(EventType event, EventListener listener) {
         events.subscribe(event, listener);
     }
 
-    public void unsubscribe(PingEventType event, PingEventListener listener) {
+    public void unsubscribe(EventType event, EventListener listener) {
         events.unsubscribe(event, listener);
     }
 }

@@ -1,7 +1,7 @@
 package xyz.vladkozlov.pinguu;
 
-import xyz.vladkozlov.pinguu.events.PingEventListener;
-import xyz.vladkozlov.pinguu.events.PingEventType;
+import xyz.vladkozlov.pinguu.events.EventListener;
+import xyz.vladkozlov.pinguu.events.EventType;
 import xyz.vladkozlov.pinguu.processors.MacPingProcessor;
 import xyz.vladkozlov.pinguu.processors.Processor;
 import xyz.vladkozlov.pinguu.processors.WindowsPingProcessor;
@@ -19,11 +19,11 @@ public class Ping {
         assert pingProcessor != null;
     }
 
-    public void addListener(PingEventType eventType, PingEventListener eventListener) {
+    public void addListener(EventType eventType, EventListener eventListener) {
         this.pingProcessor.subscribe(eventType, eventListener);
     }
 
-    public void removeListener(PingEventType eventType, PingEventListener eventListener) {
+    public void removeListener(EventType eventType, EventListener eventListener) {
         this.pingProcessor.unsubscribe(eventType, eventListener);
     }
 

@@ -2,17 +2,20 @@ package xyz.vladkozlov.pinguu.processors;
 
 import xyz.vladkozlov.pinguu.PingData;
 import xyz.vladkozlov.pinguu.PingException;
-import xyz.vladkozlov.pinguu.events.PingEventType;
+import xyz.vladkozlov.pinguu.events.Event;
+import xyz.vladkozlov.pinguu.events.EventType;
 import xyz.vladkozlov.pinguu.utils.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class WindowsPingProcessor extends PingProcessor implements Processor {
     private final String regex = "Reply from "+ Utils.IPV4_PATTERN + ": bytes=(\\d+) time=(\\d+)ms TTL=(\\d+)";
     private final Pattern pattern = Pattern.compile(regex);
+    private long eventId=1;
 
     @Override
     public void process(BufferedReader inputStream) throws IOException {
@@ -20,13 +23,18 @@ public class WindowsPingProcessor extends PingProcessor implements Processor {
         while ((originalString = inputStream.readLine()) != null)
         {
             var pingData = getPingDataFromString(originalString);
+
             if (pingData.isPresent()) {
-                super.notify(PingEventType.PING_EVENT, pingData.get());
+                var event = new Event<>(eventId, LocalDateTime.now(), pingData.get());
+                eventId++;
+                super.notify(EventType.PING_EVENT, event);
             } else {
                 try {
                     throwIfStringIsError(originalString);
                 } catch (PingException e) {
-                    System.err.println(e.getMessage());
+                    var event = new Event<>(eventId, LocalDateTime.now(), e);
+                    eventId++;
+                    super.notify(EventType.EXCEPTION_EVENT, event);
                 }
             }
         }

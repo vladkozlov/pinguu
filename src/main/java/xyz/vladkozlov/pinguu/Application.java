@@ -1,8 +1,9 @@
 package xyz.vladkozlov.pinguu;
 
-import xyz.vladkozlov.pinguu.events.PingEventType;
-import xyz.vladkozlov.pinguu.listeners.LoggerPingListener;
-import xyz.vladkozlov.pinguu.listeners.StatisticsPingListener;
+import xyz.vladkozlov.pinguu.events.EventType;
+import xyz.vladkozlov.pinguu.listeners.ExceptionListener;
+import xyz.vladkozlov.pinguu.listeners.LoggerListener;
+import xyz.vladkozlov.pinguu.listeners.StatisticsListener;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -16,8 +17,9 @@ public class Application {
             url = new URL(hostToPing);
 
             var pingApp = new Ping(url);
-            pingApp.addListener(PingEventType.PING_EVENT, new LoggerPingListener());
-            pingApp.addListener(PingEventType.PING_EVENT, new StatisticsPingListener());
+            pingApp.addListener(EventType.PING_EVENT, new LoggerListener());
+            pingApp.addListener(EventType.PING_EVENT, new StatisticsListener());
+            pingApp.addListener(EventType.EXCEPTION_EVENT, new ExceptionListener());
             pingApp.start();
         } catch (MalformedURLException e) {
             System.err.printf("Bad url %s, Err: %s", hostToPing, e.getMessage());
