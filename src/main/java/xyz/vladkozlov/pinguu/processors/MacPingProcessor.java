@@ -1,8 +1,8 @@
 package xyz.vladkozlov.pinguu.processors;
 
-import xyz.vladkozlov.pinguu.Ping;
 import xyz.vladkozlov.pinguu.PingData;
 import xyz.vladkozlov.pinguu.PingException;
+import xyz.vladkozlov.pinguu.utils.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,8 +10,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class MacPingProcessor implements PingProcessor {
-    private final String IPV4_PATTERN ="(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})";
-    private final String regex = "(\\d+) bytes from " + IPV4_PATTERN + ": icmp_seq=(\\d+) ttl=(\\d+) time=(\\d+(\\.\\d+)?) ms";
+    private final String regex = "(\\d+) bytes from " + Utils.IPV4_PATTERN + ": icmp_seq=(\\d+) ttl=(\\d+) time=(\\d+(\\.\\d+)?) ms";
     private final Pattern pattern = Pattern.compile(regex);
 
     @Override
