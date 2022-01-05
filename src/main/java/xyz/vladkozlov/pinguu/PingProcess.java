@@ -8,11 +8,11 @@ import java.net.URL;
 public class PingProcess {
 
     private Process pingProcess;
-    private final URL host;
+    private final String host;
     private BufferedReaders bufferedReaders;
     private final OS os;
 
-    public PingProcess(URL host) {
+    public PingProcess(String host) {
         this.host = host;
 
         this.os = osStringToOsEnum(System.getProperty("os.name"));
@@ -52,9 +52,8 @@ public class PingProcess {
         return new String[]{};
     }
 
-    private ProcessBuilder buildPingProcess(URL host) {
-        var hostString = host.getHost();
-        var command = getPingCommand(hostString);
+    private ProcessBuilder buildPingProcess(String host) {
+        var command = getPingCommand(host);
         return new ProcessBuilder(command);
     }
 

@@ -11,12 +11,9 @@ import java.net.URL;
 
 public class Application {
     public static void main(String[] args) throws IOException {
-        String hostToPing = "https://google.com";
-        URL url;
+        String hostToPing =  args.length > 0 ? args[0] : "google.com";
         try {
-            url = new URL(hostToPing);
-
-            var pingApp = new Pinguu(url);
+            var pingApp = new Pinguu(hostToPing);
 
             pingApp.addListener(EventType.PING_EVENT, new LoggerListener());
             pingApp.addListener(EventType.PING_EVENT, new StatisticsListener());

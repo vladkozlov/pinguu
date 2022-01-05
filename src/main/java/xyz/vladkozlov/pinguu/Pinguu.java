@@ -13,7 +13,7 @@ public class Pinguu {
     private final PingProcess pingProcess;
     private final Processor pingProcessor;
 
-    public Pinguu(URL host) {
+    public Pinguu(String host) {
         this.pingProcess = new PingProcess(host);
         this.pingProcessor = getOsSpecificProcessorStrategy(pingProcess.getOS());
         assert pingProcessor != null;
