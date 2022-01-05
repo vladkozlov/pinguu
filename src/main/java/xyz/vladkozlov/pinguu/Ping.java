@@ -10,25 +10,19 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 public class Ping {
-    private static final String[] BLACKLISTED_STRINGS_WINDOWS = {" ", "Pinging "};
-    public static final int ANALYTICS_CAPACITY = 10000;
-    private static boolean showInputString = false;
-    private static boolean showCustomOutputString = false;
-    private PingProcess pingProcess;
-    private URL host;
-    private PingProcessor pingProcessor;
+    private final PingProcess pingProcess;
 
     public Ping(URL host) {
-        this.host = host;
-        this.pingProcess = new PingProcess(this.host);
+        this.pingProcess = new PingProcess(host);
     }
 
     public boolean start() throws IOException {
         pingProcess.start();
 
-        pingProcessor = getOsSpecificProcessorStrategy(pingProcess.getOS());
+        PingProcessor pingProcessor = getOsSpecificProcessorStrategy(pingProcess.getOS());
         var inputStream = pingProcess.getInputStream();
 
+        assert pingProcessor != null;
         pingProcessor.process(inputStream);
         return false;
     }
