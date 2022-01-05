@@ -11,18 +11,18 @@ import java.net.URL;
 
 public class Ping {
     private final PingProcess pingProcess;
+    private final PingProcessor pingProcessor;
 
     public Ping(URL host) {
         this.pingProcess = new PingProcess(host);
+        this.pingProcessor = getOsSpecificProcessorStrategy(pingProcess.getOS());
+        assert pingProcessor != null;
     }
 
     public boolean start() throws IOException {
         pingProcess.start();
-
-        PingProcessor pingProcessor = getOsSpecificProcessorStrategy(pingProcess.getOS());
         var inputStream = pingProcess.getInputStream();
 
-        assert pingProcessor != null;
         pingProcessor.process(inputStream);
         return false;
     }
