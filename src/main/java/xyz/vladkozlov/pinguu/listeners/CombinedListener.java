@@ -11,9 +11,9 @@ public class CombinedListener<T> implements EventListener<T> {
         var data = event.data();
 
         if (data instanceof PingData pingData) {
-            System.out.printf("Pingo is %s\n", pingData.time());
+            System.out.printf("Pingu is %s\n", pingData.time());
         } else if (data instanceof PingException pingException) {
-            System.err.printf("Pingo is %s", pingException.getMessage());
+            System.err.printf("Pingu is dead: %s", pingException.getMessage());
         }
     }
 }
