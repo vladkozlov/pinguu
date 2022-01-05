@@ -2,9 +2,9 @@ package xyz.vladkozlov.pinguu;
 
 import xyz.vladkozlov.pinguu.events.EventListener;
 import xyz.vladkozlov.pinguu.events.EventType;
-import xyz.vladkozlov.pinguu.processors.MacPingProcessor;
 import xyz.vladkozlov.pinguu.processors.Processor;
-import xyz.vladkozlov.pinguu.processors.WindowsPingProcessor;
+import xyz.vladkozlov.pinguu.processors.mac.MacPingProcessor;
+import xyz.vladkozlov.pinguu.processors.win.WindowsPingProcessor;
 
 import java.io.IOException;
 import java.net.URL;
