@@ -2,38 +2,44 @@ package xyz.vladkozlov.pinguu.processors;
 
 import xyz.vladkozlov.pinguu.PingData;
 import xyz.vladkozlov.pinguu.PingException;
+import xyz.vladkozlov.pinguu.events.Event;
+import xyz.vladkozlov.pinguu.events.EventType;
 import xyz.vladkozlov.pinguu.utils.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class MacPingProcessor extends PingProcessor implements Processor {
     private final String regex = "(\\d+) bytes from " + Utils.IPV4_PATTERN + ": icmp_seq=(\\d+) ttl=(\\d+) time=(\\d+(\\.\\d+)?) ms";
     private final Pattern pattern = Pattern.compile(regex);
+    private long eventId;
 
     @Override
     public void process(BufferedReader inputStream) throws IOException {
         String originalString;
         while ((originalString = inputStream.readLine()) != null)
         {
-            System.out.println(originalString);
-
             var pingData = getPingDataFromString(originalString);
             if (pingData.isPresent()) {
-                System.out.printf("Latency %s\n", pingData.get().time());
+                var event = new Event<>(eventId, LocalDateTime.now(), pingData.get());
+                eventId++;
+                super.notify(EventType.PING_EVENT, event);
             } else {
                 try {
-                    throwIfStringIsError(originalString);
+                    throwIfStringIsException(originalString);
                 } catch (PingException e) {
-                    System.err.println(e.getMessage());
+                    var event = new Event<>(eventId, LocalDateTime.now(), e);
+                    eventId++;
+                    super.notify(EventType.EXCEPTION_EVENT, event);
                 }
             }
         }
     }
 
-    private void throwIfStringIsError(String originalString) throws PingException {
+    private void throwIfStringIsException(String originalString) throws PingException {
         if (originalString.startsWith("ping: sendto: No route to host")) {
             throw new PingException("No route to host");
         } else if (originalString.startsWith("Request timeout for")) {
